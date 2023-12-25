@@ -1,14 +1,15 @@
 class LinkedList
     @head = nil
 
-    def traverse
-        temp = @head
-        temp = temp.pointer until temp.pointer.nil?
-        temp
+    def tail
+      temp = @head
+      temp = temp.pointer until temp.pointer.nil?
+      temp
     end
 
+
     def prepend (value)
-      if @head.nil?
+      if @head == nil
         @head = Node.new (value)
       else
          @head = Node.new(value, @head)
@@ -16,50 +17,99 @@ class LinkedList
     end
 
     def append (value)
-        if @head.nil?
-            self.prepend(value)
+        if @head == nil
+          prepend(value)
         else
-            tail_node.pointer = Node.new(value)
+          tail.pointer = Node.new(value)
         end
     end
     
     def size
         counter = 0
-        if !@head.nil
-        until traverse.pointer.nil? do
-            
-         counter
+        if @head != nil
+          counter = 1
+          temp = @head
+          until temp.pointer.nil? do 
+          temp = temp.pointer
+          counter += 1
+          end
+        end
+        counter
     end
 
     def head
-      @head.value
+      @head
     end
     
-    def tail
-      traverse.value    
-    end
-
-    def node_at(index) #probably not needed, replace with #at(index)?
-      counter = 0
-      until counter = index do
-        # traverse issue (try temp =@head + temp = temp.pointer)
-        counter += 1
-      end
-      
-    end
-
     def at(index)
-      node_at(index).value 
+      counter = 0
+      temp = @head
+      until counter === index
+        counter += 1
+        temp = temp.pointer
+      end
+      temp
     end
 
-    def pop
-        node_at(self.size -2).pointer = nil #probably node_at not needed
+    def pop 
+      tail = nil
+      at((size - 2)).pointer = nil
     end
 
     def contains?(value)
-
+      temp = @head
+      found = false
+      loop do 
+        if temp.value == value
+          found = true
+          break
+        else
+          temp = temp.pointer
+        end
+        break if temp.pointer.nil?
+      end
+      found = true if tail.value == value
+      found
     end
-    
+
+    def find (value)
+      temp = @head
+      counter = 0
+      until temp.pointer.nil? do
+        if temp.value == value
+          break
+        else
+          temp = temp.pointer
+          counter += 1
+        end
+      end
+      counter = nil unless contains?(value)
+      counter
+    end
+
+    def to_s
+      string1 = ""
+      string2 = "nil"
+      if @head != nil #not
+        temp = @head
+        string1 = "(#{temp.value})->"
+        until temp.pointer.nil? do
+          temp = temp.pointer
+          string1 << "(#{temp.value})->"
+        end
+      end
+      puts string1 + string2
+    end
+
+    def insert_at (value,index)
+      temp = at(index)
+      at(index-1).pointer = Node.new(value, temp)
+    end
+
+    def remove_at(index)
+      temp = at(index)
+      at(index-1).pointer = temp.pointer
+    end
 end
 
 class Node
@@ -69,3 +119,8 @@ class Node
       @value, @pointer = value , pointer
     end
 end
+
+list = LinkedList.new
+list.append("A")
+list.append("B")
+list.append("C")
